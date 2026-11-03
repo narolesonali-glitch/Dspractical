@@ -1,0 +1,92 @@
+
+#include <iostream>
+using namespace std;
+
+#define MAX 20
+
+class Graph
+{
+    int adj[MAX][MAX];
+    int n;
+
+public:
+    void createGraph()
+    {
+        cout << "Enter number of cities: ";
+        cin >> n;
+
+        // Initialize matrix
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                adj[i][j] = 0;
+
+        int edges;
+        cout << "Enter number of flight paths: ";
+        cin >> edges;
+
+        cout << "\nEnter flight paths and cost:\n";
+
+        for (int i = 0; i < edges; i++)
+        {
+            int u, v, cost;
+
+            cout << "Enter source city, destination city and cost: ";
+            cin >> u >> v >> cost;
+
+            adj[u][v] = cost;
+        }
+    }
+
+    void displayMatrix()
+    {
+        cout << "\nAdjacency Matrix:\n";
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+                cout << adj[i][j] << "\t";
+
+            cout << endl;
+        }
+    }
+
+    void DFS(int v, bool visited[])
+    {
+        visited[v] = true;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (adj[v][i] != 0 && !visited[i])
+                DFS(i, visited);
+        }
+    }
+
+    void checkConnected()
+    {
+        bool visited[MAX] = {false};
+
+        DFS(0, visited);
+
+        for (int i = 0; i < n; i++)
+        {
+            if (!visited[i])
+            {
+                cout << "\nGraph is NOT Connected.\n";
+                return;
+            }
+        }
+
+        cout << "\nGraph is Connected.\n";
+    }
+};
+
+int main()
+{
+    Graph g;
+
+    g.createGraph();
+    g.displayMatrix();
+    g.checkConnected();
+
+    return 0;
+}
